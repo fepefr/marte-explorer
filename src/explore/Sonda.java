@@ -1,10 +1,10 @@
 package explore;
 
 public class Sonda {
-	private int id;
+	private Integer id;
 	private Posicao posicao;
 
-	public Sonda(int idSonda, Posicao posSonda) {
+	public Sonda(Integer idSonda, Posicao posSonda) {
 		this.id = idSonda;
 		this.posicao = posSonda;
 	}
@@ -17,11 +17,11 @@ public class Sonda {
 		this.posicao = posicao;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 }

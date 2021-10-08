@@ -3,9 +3,9 @@ package explore;
 public class Posicao {
 	int x;
 	int y;
-	String direction;
+	Direction direction;
 	
-	public Posicao(int x, int y, String direction) {
+	public Posicao(int x, int y, Direction direction) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -14,7 +14,7 @@ public class Posicao {
 	public Posicao(String[] posSonda) {
 		this.x = Integer.parseInt(posSonda[0]);
 		this.y = Integer.parseInt(posSonda[1]);
-		this.direction = posSonda[2];
+		this.direction = Direction.valueOf(posSonda[2]);
 	}
 	public int getX() {
 		return x;
@@ -45,10 +45,10 @@ public class Posicao {
 	public void setY(int y) {
 		this.y = y;
 	}
-	public String getDirection() {
+	public Direction getDirection() {
 		return direction;
 	}
-	public void setDirection(String direction) {
+	public void setDirection(Direction direction) {
 		this.direction = direction;
 	} 
 }

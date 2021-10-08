@@ -11,86 +11,89 @@ import java.util.List;
 public class ControlarSondas {
 
 	public static void main(String []args) throws IOException {
-	    
 	    List<String[]> inputLines = readInput();
 	    
-		String[][] malha = createMalha(inputLines);
+	    Sonda[][] malha = createMalha(inputLines);
 		
-		for (int l = 1; l < inputLines.size(); l=l+2) {
-			Posicao posSonda = new Posicao(inputLines.get(l));
-			posicionarSonda(posSonda, malha);
+		for (int l = 1, i = 0; l < inputLines.size(); l=l+2, i++) {
+			Sonda sonda = createSonda(inputLines, l, i);
+			posicionarSonda(sonda, malha);
 			String comandos = String.join("",inputLines.get(l+1));
-			moverSonda(posSonda, malha, comandos);
-			System.out.println(posSonda.getX() + " " + posSonda.getY() + " " + malha[posSonda.getX()][posSonda.getY()]);
+			controlarSonda(sonda, malha, comandos);
+			System.out.println(sonda.getPosicao().getX() + " " + sonda.getPosicao().getY() + " " + sonda.getPosicao().getDirection());
 		}
 	}
 
-	private static void moverSonda(Posicao posSonda, String[][] malha, String comandos) {
+	private static Sonda createSonda(List<String[]> inputLines, int l, int i) {
+		Posicao posSonda = new Posicao(inputLines.get(l));
+		int idSonda = i;
+		Sonda sonda = new Sonda(idSonda, posSonda);
+		return sonda;
+	}
+
+	private static void controlarSonda(Sonda sonda, Sonda[][] malha, String comandos) {
 		for(int i = 0, n = comandos.length() ; i < n ; i++) { 
 		    char comando = comandos.charAt(i); 
 		    switch (comando) {
 			case 'L':
-				direcionarSondaEsquerda(posSonda, malha);				
+				direcionarSondaEsquerda(sonda);				
 				break;
 			case 'R':
-				direcionarSondaDireita(posSonda, malha);		
+				direcionarSondaDireita(sonda);		
 				break;
 			case 'M':
-				moverSonda(posSonda, malha);		
+				moverSonda(sonda, malha);		
 				break;
 			}
 		}
 	}
 
-	private static void direcionarSondaDireita(Posicao posSonda, String[][] malha) {
-		if ("N".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = "E";
-		}else if ("E".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = "S";
-		}else if ("S".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = "W";
-		}else if ("W".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = "N";
+	private static void direcionarSondaDireita(Sonda sonda) {
+		if (Direction.N.equals(sonda.getPosicao().getDirection())) {
+			sonda.getPosicao().setDirection(Direction.E);
+		}else if (Direction.E.equals(sonda.getPosicao().getDirection())) {
+			sonda.getPosicao().setDirection(Direction.S);
+		}else if (Direction.S.equals(sonda.getPosicao().getDirection())) {
+			sonda.getPosicao().setDirection(Direction.W);
+		}else if (Direction.W.equals(sonda.getPosicao().getDirection())) {
+			sonda.getPosicao().setDirection(Direction.N);
 		}
 	}
 
-	private static void direcionarSondaEsquerda(Posicao posSonda, String[][] malha) {
-		if ("N".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = "W";
-		}else if ("W".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = "S";
-		}else if ("S".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = "E";
-		}else if ("E".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = "N";
+	private static void direcionarSondaEsquerda(Sonda sonda) {
+		if (Direction.N.equals(sonda.getPosicao().getDirection())) {
+			sonda.getPosicao().setDirection(Direction.W);
+		}else if (Direction.W.equals(sonda.getPosicao().getDirection())) {
+			sonda.getPosicao().setDirection(Direction.S);
+		}else if (Direction.S.equals(sonda.getPosicao().getDirection())) {
+			sonda.getPosicao().setDirection(Direction.E);
+		}else if (Direction.E.equals(sonda.getPosicao().getDirection())) {
+			sonda.getPosicao().setDirection(Direction.N);
 		}
 	}
 
-	private static void moverSonda(Posicao posSonda, String[][] malha) {
-		if ("N".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = null;
-			malha[posSonda.getX()][posSonda.incrY()] = "N";
-		}else if ("E".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = null;
-			malha[posSonda.incrX()][posSonda.getY()] = "E";
-		}else if ("S".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = null;
-			malha[posSonda.getX()][posSonda.decrY()] = "S";
-		}else if ("W".equals(malha[posSonda.getX()][posSonda.getY()])) {
-			malha[posSonda.getX()][posSonda.getY()] = null;
-			malha[posSonda.decrX()][posSonda.getY()] = "W";
+	private static void moverSonda(Sonda sonda, Sonda[][] malha) {
+		malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()] = null;
+		if (Direction.N.equals(sonda.getPosicao().getDirection())) {
+			malha[sonda.getPosicao().getX()][sonda.getPosicao().incrY()] = sonda;
+		}else if (Direction.E.equals(sonda.getPosicao().getDirection())) {
+			malha[sonda.getPosicao().incrX()][sonda.getPosicao().getY()] = sonda;
+		}else if (Direction.S.equals(sonda.getPosicao().getDirection())) {
+			malha[sonda.getPosicao().getX()][sonda.getPosicao().decrY()] = sonda;
+		}else if (Direction.W.equals(sonda.getPosicao().getDirection())) {
+			malha[sonda.getPosicao().decrX()][sonda.getPosicao().getY()] = sonda;
 		}
 	}
 
-	private static void posicionarSonda(Posicao posSonda, String[][] malha) {
-		malha[posSonda.getX()][posSonda.getY()] = posSonda.getDirection();
+	private static void posicionarSonda(Sonda sonda, Sonda[][] malha) {
+		malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()] = sonda;
 		
 	}
 
-	private static String[][] createMalha(List<String[]> inputLines) {
+	private static Sonda[][] createMalha(List<String[]> inputLines) {
 		int larguraMalha = Integer.parseInt(inputLines.get(0)[0]);
 		int alturaMalha = Integer.parseInt(inputLines.get(0)[1]);
-		String[][] malha = new String[larguraMalha+1][alturaMalha+1];
+		Sonda[][] malha = new Sonda[larguraMalha+1][alturaMalha+1];
 		return malha;
 	}
 

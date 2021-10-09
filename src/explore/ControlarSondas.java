@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ControlarSondas {
 
+	@SuppressWarnings("unchecked")
 	public static void main(String []args) throws IOException {
 	    List<String[]> inputLines = readInput();
 	    
@@ -21,8 +23,29 @@ public class ControlarSondas {
 			Sonda sonda = createSonda(inputLines, l, i);
 			posicionarSonda(sonda, malha);
 			String comandos = String.join("",inputLines.get(l+1));
-			controlarSonda(sonda, malha, comandos);
-			System.out.println(sonda.getPosicao().getX() + " " + sonda.getPosicao().getY() + " " + sonda.getPosicao().getDirection());
+			try {
+				controlarSonda(sonda, malha, comandos);
+			}catch(ArrayIndexOutOfBoundsException e) {
+				//System.err.println("Erro ao movimentar sonda id: " + sonda.getId() +" além dos limites da malhar");
+			}
+			//System.out.println(sonda.getPosicao().getX() + " " + sonda.getPosicao().getY() + " " + sonda.getPosicao().getDirection());
+		}
+		//System.out.println("XXX");
+		printSondasPositionInMalha(malha);
+	}
+
+	private static void printSondasPositionInMalha(Map<?, ?>[][] malha) {
+		TreeMap<Integer, Sonda> sorted = new TreeMap<>();
+		for (int i = 0; i < malha.length; i++) {
+			for (int j = 0; j < malha[i].length; j++) {
+				if(malha[i][j] != null) {
+					sorted.putAll((Map<? extends Integer, ? extends Sonda>) malha[i][j]);
+				}
+			}
+		}
+		
+		for (Map.Entry<Integer, Sonda> sonda : sorted.entrySet()) {
+			System.out.println(sonda.getValue().getPosicao().getX() + " " + sonda.getValue().getPosicao().getY() + " " + sonda.getValue().getPosicao().getDirection());
 		}
 	}
 
@@ -74,6 +97,7 @@ public class ControlarSondas {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private static void moverSonda(Sonda sonda, Map<?, ?>[][] malha) {
 		malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()].remove(sonda.getId());
 		if (Direction.N.equals(sonda.getPosicao().getDirection())) {
@@ -115,6 +139,7 @@ public class ControlarSondas {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private static void posicionarSonda(Sonda sonda, Map<?, ?>[][] malha) {
 		if(malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()] == null) {
 			Map<Integer, Sonda> sondas = new HashMap<Integer, Sonda>();

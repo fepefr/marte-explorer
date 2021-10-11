@@ -6,156 +6,70 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class ControlarSondas {
 
-	@SuppressWarnings("unchecked")
+	public static final char MOVE = 'M';
+	public static final char RIGHT = 'R';
+	public static final char LEFT = 'L';
+
 	public static void main(String []args) throws IOException {
 	    List<String[]> inputLines = readInput();
 	    
-	    Map<?, ?>[][] malha = createMalha(inputLines);
-		
-		for (int l = 1, i = 0; l < inputLines.size(); l=l+2, i++) {
-			Sonda sonda = createSonda(inputLines, l, i);
-			posicionarSonda(sonda, malha);
-			String comandos = String.join("",inputLines.get(l+1));
+	    Malha malha = buildMalha(inputLines);
+	    
+		for (int line = 1, idSonda = 0; line < inputLines.size(); line=line+2, idSonda++) {
+
+			Posicao posicao = buildPosicao(inputLines, line);
+			Sonda sonda = new Sonda(idSonda, posicao);
+			malha.addSonda(sonda);
+			String comandos = buildComandos(inputLines, line);
 			try {
-				controlarSonda(sonda, malha, comandos);
+				controlarSonda(sonda, comandos);
 			}catch(ArrayIndexOutOfBoundsException e) {
 				//System.err.println("Erro ao movimentar sonda id: " + sonda.getId() +" além dos limites da malhar");
 			}
-			//System.out.println(sonda.getPosicao().getX() + " " + sonda.getPosicao().getY() + " " + sonda.getPosicao().getDirection());
+			System.out.println(sonda.getPosicao().getX() + " " + sonda.getPosicao().getY() + " " + sonda.getPosicao().getDirection());
 		}
-		//System.out.println("XXX");
-		printSondasPositionInMalha(malha);
+		System.out.println("XXX");
+		malha.printCurrentSondasPosition();
 	}
 
-	private static void printSondasPositionInMalha(Map<?, ?>[][] malha) {
-		TreeMap<Integer, Sonda> sorted = new TreeMap<>();
-		for (int i = 0; i < malha.length; i++) {
-			for (int j = 0; j < malha[i].length; j++) {
-				if(malha[i][j] != null) {
-					sorted.putAll((Map<? extends Integer, ? extends Sonda>) malha[i][j]);
-				}
-			}
-		}
-		
-		for (Map.Entry<Integer, Sonda> sonda : sorted.entrySet()) {
-			System.out.println(sonda.getValue().getPosicao().getX() + " " + sonda.getValue().getPosicao().getY() + " " + sonda.getValue().getPosicao().getDirection());
-		}
+	private static String buildComandos(List<String[]> inputLines, int line) {
+		return String.join("",inputLines.get(line+1));
 	}
 
-	private static Sonda createSonda(List<String[]> inputLines, int l, int i) {
-		Posicao posSonda = new Posicao(inputLines.get(l));
-		int idSonda = i;
-		Sonda sonda = new Sonda(idSonda, posSonda);
-		return sonda;
+	private static Posicao buildPosicao(List<String[]> inputLines, int line) {
+		Integer x = Integer.parseInt(inputLines.get(line)[0]);
+		Integer y = Integer.parseInt(inputLines.get(line)[1]);
+		Direction direction = Direction.valueOf(inputLines.get(line)[2]);
+		Posicao posicao = new Posicao(x, y, direction);
+		return posicao;
 	}
 
-	private static void controlarSonda(Sonda sonda, Map<?, ?>[][] malha, String comandos) {
+	private static Malha buildMalha(List<String[]> inputLines) {
+		Integer larguraMalha = Integer.parseInt(inputLines.get(0)[0]);
+		Integer alturaMalha = Integer.parseInt(inputLines.get(0)[1]);
+	    Malha malha = new Malha(larguraMalha, alturaMalha);
+		return malha;
+	}
+
+	private static void controlarSonda(Sonda sonda, String comandos) {
 		for(int i = 0, n = comandos.length() ; i < n ; i++) { 
 		    char comando = comandos.charAt(i); 
 		    switch (comando) {
-			case 'L':
-				direcionarSondaEsquerda(sonda);				
+			case LEFT:
+				sonda.direcionarEsquerda();				
 				break;
-			case 'R':
-				direcionarSondaDireita(sonda);		
+			case RIGHT:
+				sonda.direcionarDireita();		
 				break;
-			case 'M':
-				moverSonda(sonda, malha);		
+			case MOVE:
+				sonda.mover();		
 				break;
 			}
 		}
-	}
-
-	private static void direcionarSondaDireita(Sonda sonda) {
-		if (Direction.N.equals(sonda.getPosicao().getDirection())) {
-			sonda.getPosicao().setDirection(Direction.E);
-		}else if (Direction.E.equals(sonda.getPosicao().getDirection())) {
-			sonda.getPosicao().setDirection(Direction.S);
-		}else if (Direction.S.equals(sonda.getPosicao().getDirection())) {
-			sonda.getPosicao().setDirection(Direction.W);
-		}else if (Direction.W.equals(sonda.getPosicao().getDirection())) {
-			sonda.getPosicao().setDirection(Direction.N);
-		}
-	}
-
-	private static void direcionarSondaEsquerda(Sonda sonda) {
-		if (Direction.N.equals(sonda.getPosicao().getDirection())) {
-			sonda.getPosicao().setDirection(Direction.W);
-		}else if (Direction.W.equals(sonda.getPosicao().getDirection())) {
-			sonda.getPosicao().setDirection(Direction.S);
-		}else if (Direction.S.equals(sonda.getPosicao().getDirection())) {
-			sonda.getPosicao().setDirection(Direction.E);
-		}else if (Direction.E.equals(sonda.getPosicao().getDirection())) {
-			sonda.getPosicao().setDirection(Direction.N);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void moverSonda(Sonda sonda, Map<?, ?>[][] malha) {
-		malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()].remove(sonda.getId());
-		if (Direction.N.equals(sonda.getPosicao().getDirection())) {
-			Map<Integer, Sonda> sondas = (Map<Integer,Sonda>) malha[sonda.getPosicao().getX()][sonda.getPosicao().incrY()];
-			if(sondas==null) {
-				sondas = new HashMap<Integer, Sonda>();
-				sondas.put(sonda.getId(), sonda);
-				malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()] = sondas;
-			}else {
-				sondas.put(sonda.getId(), sonda);
-			}
-		}else if (Direction.E.equals(sonda.getPosicao().getDirection())) {
-			Map<Integer, Sonda> sondas = (Map<Integer,Sonda>) malha[sonda.getPosicao().incrX()][sonda.getPosicao().getY()];
-			if(sondas==null) {
-				sondas = new HashMap<Integer, Sonda>();
-				sondas.put(sonda.getId(), sonda);
-				malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()] = sondas;
-			}else {
-				sondas.put(sonda.getId(), sonda);
-			}
-		}else if (Direction.S.equals(sonda.getPosicao().getDirection())) {
-			Map<Integer, Sonda> sondas = (Map<Integer,Sonda>) malha[sonda.getPosicao().getX()][sonda.getPosicao().decrY()];
-			if(sondas==null) {
-				sondas = new HashMap<Integer, Sonda>();
-				sondas.put(sonda.getId(), sonda);
-				malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()] = sondas;
-			}else {
-				sondas.put(sonda.getId(), sonda);
-			}
-		}else if (Direction.W.equals(sonda.getPosicao().getDirection())) {
-			Map<Integer, Sonda> sondas = (Map<Integer,Sonda>) malha[sonda.getPosicao().decrX()][sonda.getPosicao().getY()];
-			if(sondas==null) {
-				sondas = new HashMap<Integer, Sonda>();
-				sondas.put(sonda.getId(), sonda);
-				malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()] = sondas;
-			}else {
-				sondas.put(sonda.getId(), sonda);
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void posicionarSonda(Sonda sonda, Map<?, ?>[][] malha) {
-		if(malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()] == null) {
-			Map<Integer, Sonda> sondas = new HashMap<Integer, Sonda>();
-			sondas.put(sonda.getId(), sonda);
-			malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()] = sondas;
-		}else {
-			Map<Integer, Sonda> sondas = (Map<Integer,Sonda>) malha[sonda.getPosicao().getX()][sonda.getPosicao().getY()];
-			sondas.put(sonda.getId(), sonda);
-		}
-	}
-
-	private static Map<?, ?>[][] createMalha(List<String[]> inputLines) {
-		int larguraMalha = Integer.parseInt(inputLines.get(0)[0]);
-		int alturaMalha = Integer.parseInt(inputLines.get(0)[1]);
-		Map<?, ?>[][] malha = new HashMap<?, ?>[larguraMalha+1][alturaMalha+1];
-		return malha;
 	}
 
 	private static List<String[]> readInput() throws IOException, FileNotFoundException {
@@ -167,7 +81,11 @@ public class ControlarSondas {
 	        while((line = reader.readLine()) != null){
 	            inputLines.add(line.split(" "));
 	        }
-	    }
+	    }catch(Exception e) {
+	    	System.err.println("Erro ao ler arquivo.");
+	    	System.exit(-1);
+		}
 		return inputLines;
 	}
+	
 }

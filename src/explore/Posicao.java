@@ -1,48 +1,44 @@
 package explore;
 
 public class Posicao {
-	int x;
-	int y;
-	Direction direction;
+	private Integer x;
+	private Integer y;
+	private Direction direction;
 	
-	public Posicao(int x, int y, Direction direction) {
+	public Posicao(Integer x, Integer y, Direction direction) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
 	}
-	public Posicao(String[] posSonda) {
-		this.x = Integer.parseInt(posSonda[0]);
-		this.y = Integer.parseInt(posSonda[1]);
-		this.direction = Direction.valueOf(posSonda[2]);
-	}
-	public int getX() {
+
+	public Integer getX() {
 		return x;
 	}
-	public void setX(int x) {
+	public void setX(Integer x) {
 		this.x = x;
 	}
-	public int getY() {
+	public Integer getY() {
 		return y;
 	}
 	
-	public int incrY() {
+	public Integer incrY() {
 		return ++this.y;
 	}
 	
-	public int incrX() {
+	public Integer incrX() {
 		return ++this.x;
 	}
 	
-	public int decrY() {
+	public Integer decrY() {
 		return --this.y;
 	}
 	
-	public int decrX() {
+	public Integer decrX() {
 		return --this.x;
 	}
 	
-	public void setY(int y) {
+	public void setY(Integer y) {
 		this.y = y;
 	}
 	public Direction getDirection() {

@@ -1,5 +1,7 @@
 package explore;
 
+import java.util.Objects;
+
 public class Posicao {
 	private Integer x;
 	private Integer y;
@@ -46,5 +48,29 @@ public class Posicao {
 	}
 	public void setDirection(Direction direction) {
 		this.direction = direction;
-	} 
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(direction, x, y);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Posicao other = (Posicao) obj;
+		return direction == other.direction && Objects.equals(x, other.x) && Objects.equals(y, other.y);
+	}
+
+	@Override
+	public String toString() {
+		return  x + " " + y + " " + direction;
+	}
+	
+	
 }

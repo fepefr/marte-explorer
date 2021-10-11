@@ -3,7 +3,7 @@ package explore;
 import java.util.Map;
 import java.util.Objects;
 
-public class Sonda implements Comparable<Sonda> {
+public class Sonda  {
 	private Integer id;
 	private Posicao posicao;
 	private Malha malha;
@@ -85,11 +85,6 @@ public class Sonda implements Comparable<Sonda> {
 	}
 
 	@Override
-	public int compareTo(Sonda sonda) {
-		 return (int)(this.id - sonda.getId());
-	}
-
-	@Override
 	public int hashCode() {
 		return Objects.hash(id, posicao);
 	}
@@ -112,5 +107,10 @@ public class Sonda implements Comparable<Sonda> {
 
 	public void setMalha(Malha malha) {
 		this.malha = malha;
+	}
+
+	@Override
+	public String toString() {
+		return "Sonda [id=" + id + ", posicao=" + posicao + ", malha=" + malha + "]";
 	}
 }

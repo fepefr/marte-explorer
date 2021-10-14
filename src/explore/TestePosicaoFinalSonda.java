@@ -39,23 +39,23 @@ class TestePosicaoFinalSonda {
 	
 	@Test
 	void testEntradaSaidaViaArquivo() throws FileNotFoundException, IOException {
-		List<String[]> inputLines = ControladorSondas.readInput();
-		Malha malha = ControladorSondas.buildMalha(inputLines);
+		List<String[]> inputLines = ControladorSondaUtil.readInput();
+		Malha malha = ControladorSondaUtil.buildMalha(inputLines);
 
 		for (int line = 1, idSonda = 0; line < inputLines.size(); line = line + 2, idSonda++) {
 			Sonda sonda = null;
 			try {
-				Posicao posicao = ControladorSondas.buildPosicao(inputLines, line);
+				Posicao posicao = ControladorSondaUtil.buildPosicao(inputLines, line);
 				sonda = new Sonda(idSonda, posicao);
 				malha.addSonda(sonda);
-				String comandos = ControladorSondas.buildComandos(inputLines, line);
+				String comandos = ControladorSondaUtil.buildComandos(inputLines, line);
 				ControladorSondas.comandarSonda(sonda, comandos);
 			} catch (ArrayIndexOutOfBoundsException e) {
 				System.err.println("Erro ao movimentar sonda id: " + sonda.getId() + " além dos limites da malhar");
 			}
 		}
 		String currentSondasPosition = malha.getCurrentSondasPosition();
-		String posicoesEsperadas = ControladorSondas.readOutput();
+		String posicoesEsperadas = ControladorSondaUtil.readOutput();
 		assertEquals(currentSondasPosition, posicoesEsperadas);
 	}
 

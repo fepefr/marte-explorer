@@ -34,7 +34,7 @@ public class ControladorSondaUtil {
 
 
 	public static List<String[]> readInput() throws IOException, FileNotFoundException {
-		File file = new File("src/input.txt");
+		File file = new File("src/explore/test/input.txt");
 		List<String[]> inputLines = new ArrayList<>();
 	    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 	        // Read the lines from the input file
@@ -50,7 +50,7 @@ public class ControladorSondaUtil {
 	}
 
 	public static String readOutput() {
-		File file = new File("src/output.txt");
+		File file = new File("src/explore/test/output.txt");
 		StringBuilder result = new StringBuilder();
 		List<String> lines = new ArrayList<String>();
 	    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {

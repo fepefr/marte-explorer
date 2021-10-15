@@ -46,19 +46,19 @@ public class Sonda  {
 		Map<Integer, Sonda> sondas;
 		switch (this.posicao.getDirection()) {
 		case N: {
-			sondas = (Map<Integer, Sonda>) malha.getMalha()[posicao.getX()][posicao.incrY()];
+			sondas = malha.getSondas()[posicao.getX()][posicao.incrY()];
 			break;
 		}
 		case E: {
-			sondas = (Map<Integer, Sonda>) malha.getMalha()[posicao.incrX()][posicao.getY()];
+			sondas = malha.getSondas()[posicao.incrX()][posicao.getY()];
 			break;
 		}
 		case S: {
-			sondas = (Map<Integer, Sonda>) malha.getMalha()[posicao.getX()][posicao.decrY()];
+			sondas = malha.getSondas()[posicao.getX()][posicao.decrY()];
 			break;
 		}
 		case W: {
-			sondas = (Map<Integer, Sonda>) malha.getMalha()[posicao.decrX()][posicao.getY()];
+			sondas = malha.getSondas()[posicao.decrX()][posicao.getY()];
 			break;
 		}
 		default:

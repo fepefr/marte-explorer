@@ -12,15 +12,7 @@ public class Malha   {
 	
 	@SuppressWarnings("unchecked")
 	public Malha(Integer largura, Integer altura) {
-		this.setMalha(new HashMap[largura + 1][altura + 1]);
-	}
-
-	public Map<Integer, Sonda>[][] getMalha() {
-		return sondas;
-	}
-
-	public void setMalha(Map<Integer, Sonda>[][] malha) {
-		this.sondas = malha;
+		this.sondas = new HashMap[largura + 1][altura + 1];
 	}
 
 	public Sonda removerSonda(Sonda sonda) {
@@ -36,11 +28,9 @@ public class Malha   {
 	public void addSonda(Sonda sonda, Map<Integer, Sonda> positionVector) {
 		if(positionVector==null) {
 			positionVector = new HashMap<Integer, Sonda>();
-			positionVector.put(sonda.getId(), sonda);
 			this.sondas[sonda.getPosicao().getX()][sonda.getPosicao().getY()] = positionVector;
-		}else {
-			positionVector.put(sonda.getId(), sonda);
 		}
+		positionVector.put(sonda.getId(), sonda);
 	}
 	
 	public void printCurrentSondasPosition() {
@@ -86,5 +76,17 @@ public class Malha   {
 			}
 		}
 		return sorted;
+	}
+
+	public Map<Integer, Sonda>[][] getSondas() {
+		return sondas;
+	}
+	
+	public Map<Integer, Sonda> getSondasByPosicao(Posicao posicao) {
+		return this.sondas[posicao.getX()][posicao.getY()];
+	}
+
+	public void setSondas(Map<Integer, Sonda>[][] sondas) {
+		this.sondas = sondas;
 	}
 }

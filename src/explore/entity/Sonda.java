@@ -1,4 +1,4 @@
-package explore;
+package explore.entity;
 
 import java.util.Map;
 import java.util.Objects;
@@ -13,7 +13,7 @@ public class Sonda  {
 		this.posicao = posSonda;
 	}
 	
-	protected void direcionarDireita() {
+	public void direcionarDireita() {
 		if (Direction.N.equals(this.posicao.getDirection())) {
 			this.posicao.setDirection(Direction.E);
 		} else if (Direction.E.equals(this.posicao.getDirection())) {
@@ -25,7 +25,7 @@ public class Sonda  {
 		}
 	}
 
-	protected void direcionarEsquerda() {
+	public void direcionarEsquerda() {
 		if (Direction.N.equals(this.posicao.getDirection())) {
 			this.posicao.setDirection(Direction.W);
 		}else if (Direction.W.equals(this.posicao.getDirection())) {
@@ -37,7 +37,7 @@ public class Sonda  {
 		}
 	}
 	
-	protected void mover() {
+	public void mover() {
 		malha.removerSonda(this);
 		malha.addSonda(this, getNextPosition());
 	}

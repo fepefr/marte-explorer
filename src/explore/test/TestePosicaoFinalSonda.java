@@ -1,4 +1,4 @@
-package explore;
+package explore.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,6 +7,13 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+
+import explore.ControladorSondaUtil;
+import explore.ControladorSondas;
+import explore.entity.Direction;
+import explore.entity.Malha;
+import explore.entity.Posicao;
+import explore.entity.Sonda;
 
 class TestePosicaoFinalSonda {
 

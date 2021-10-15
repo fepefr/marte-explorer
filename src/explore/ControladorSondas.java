@@ -3,6 +3,10 @@ package explore;
 import java.io.IOException;
 import java.util.List;
 
+import explore.entity.Malha;
+import explore.entity.Posicao;
+import explore.entity.Sonda;
+
 public class ControladorSondas {
 
 	public static final char MOVE = 'M';

@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import explore.entity.Direction;
+import explore.entity.Malha;
+import explore.entity.Posicao;
+
 public class ControladorSondaUtil {
 	public static String buildComandos(List<String[]> inputLines, int line) {
 		return String.join("",inputLines.get(line+1));

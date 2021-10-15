@@ -1,4 +1,4 @@
-package explore;
+package explore.entity;
 
 import java.util.HashMap;
 import java.util.Map;
